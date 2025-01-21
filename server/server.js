@@ -23,10 +23,14 @@ app.get("/user/:rfid", async (req, res) => {
   const { data, error } = await supabase
     .from("pengguna")
     .select(`nama, kelas, jurusan, rfid`)
-    .eq("rfid", rfid);
+    .eq("rfid", rfid)
+    .limit(1)
+    .single();
 
   if (error) {
-    return res.send({ message: error });
+    const errorMessage =
+      error.code == "PGRST116" ? "Kartu yang digunakan belum terdaftar" : error;
+    return res.status(404).json({ message: errorMessage });
   }
 
   res.status(200).json(data);
@@ -54,14 +58,14 @@ app.get("/user/check/:rfid", async (req, res) => {
       errorUser.code == "PGRST116"
         ? "Kartu yang digunakan belum terdaftar"
         : errorUser;
-    return res.status(404).send({ message: errorMessage });
+    return res.status(404).json({ message: errorMessage });
   }
 
   const delta =
     new Date().getTime() - new Date(dataUser.kunjungan[0].timestamp).getTime();
 
   if (delta <= 1000 * 60 * 5) {
-    return res.send({
+    return res.json({
       message:
         "Tunggu beberapa saat lagi ya, kamu hanya bisa keluar/masuk perpustakaan setiap 5 menit.",
     });
@@ -82,7 +86,7 @@ app.get("/user/check/:rfid", async (req, res) => {
     .single();
 
   if (errorInsert) {
-    return res.send({ message: errorInsert });
+    return res.json({ message: errorInsert });
   }
 
   res.status(200).json({

@@ -14,7 +14,7 @@ export default {
   async beforeRouteEnter(to, from, next) {
     try {
       const rfid = to.params.rfid; // Extract RFID from the route parameter
-      const response = await fetch(`http://localhost:3000/user/${rfid}`);
+      const response = await fetch(`http://localhost:3000/user/check/${rfid}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
@@ -27,7 +27,7 @@ export default {
 
   beforeRouteUpdate(to, from) {
     this.user = null; // Clear current user data
-    fetch(`http://localhost:3000/user/${to.params.rfid}`)
+    fetch(`http://localhost:3000/user/check/${to.params.rfid}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -53,16 +53,17 @@ export default {
   <div>
     <h1>RFID: {{ rfid }}</h1>
 
-    <div v-if="user">
+    <div v-if="user && user.message">
+      <p class="error">{{ user.message }}</p>
+    </div>
+
+    <div v-else-if="user && user.nama">
       <h2>User Information</h2>
-      <p><strong>Nama:</strong> {{ user[0].nama }}</p>
-      <p><strong>Kelas:</strong> {{ user[0].kelas }}</p>
-      <p><strong>Jurusan:</strong> {{ user[0].jurusan }}</p>
-      <!-- <div v-if="user.kunjungan">
-        <h3>Last Visit</h3>
-        <p><strong>Event:</strong> {{ user.kunjungan.event }}</p>
-        <p><strong>Timestamp:</strong> {{ user.kunjungan.timestamp }}</p>
-      </div> -->
+      <p><strong>Nama:</strong> {{ user.nama }}</p>
+      <p><strong>Kelas:</strong> {{ user.kelas }}</p>
+      <p><strong>Jurusan:</strong> {{ user.jurusan }}</p>
+      <p><strong>Timestamp:</strong> {{ user.timestamp }}</p>
+      <p><strong>Event:</strong> {{ user.event }}</p>
     </div>
 
     <div v-else-if="error">
