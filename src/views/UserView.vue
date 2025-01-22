@@ -38,6 +38,13 @@ export default {
       .catch((err) => this.setError(err));
   },
 
+  mounted() {
+    // Tambahkan logika redirect setelah 5 detik
+    setTimeout(() => {
+      this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
+    }, 5000); // 5000 ms = 5 detik
+  },
+
   methods: {
     setUser(user) {
       this.user = user;
