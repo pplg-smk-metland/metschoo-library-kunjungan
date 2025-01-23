@@ -6,7 +6,7 @@ document.addEventListener("keydown", (event) => {
     // Jika Enter ditekan, anggap data sudah lengkap
     window.location.href = `/user/${rfidInput}`;
     rfidInput = ""; // Reset variabel
-  } else {
+  } else if (!isNaN(event.key) && event.key !== " ") {
     rfidInput += event.key; // Tambahkan karakter ke rfidInput
   }
 });
