@@ -61,8 +61,10 @@ app.get("/user/check/:rfid", async (req, res) => {
     return res.status(404).json({ message: errorMessage });
   }
 
+  const currentTime = new Date().getTime();
   const delta =
-    new Date().getTime() - new Date(dataUser.kunjungan[0].timestamp).getTime();
+    currentTime - new Date(dataUser.kunjungan[0]?.timestamp).getTime() ??
+    currentTime;
 
   if (delta <= 1000 * 60 * 5) {
     return res.json({
@@ -72,7 +74,7 @@ app.get("/user/check/:rfid", async (req, res) => {
   }
 
   const checkValue =
-    dataUser.kunjungan[0].event == "check_in" ? "check_out" : "check_in";
+    dataUser.kunjungan[0]?.event == "check_in" ? "check_out" : "check_in";
 
   const { data: dataKunjungan, error: errorInsert } = await supabase
     .from("kunjungan")
@@ -93,6 +95,8 @@ app.get("/user/check/:rfid", async (req, res) => {
     nama: dataUser.nama,
     kelas: dataUser.kelas,
     jurusan: dataUser.jurusan,
+    lastTimestamp: dataUser.kunjungan[0]?.timestamp,
+    lastEvent: dataUser.kunjungan[0]?.event,
     timestamp: dataKunjungan.timestamp,
     event: dataKunjungan.event,
   });
