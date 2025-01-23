@@ -14,7 +14,7 @@ export default {
   async beforeRouteEnter(to, from, next) {
     try {
       const rfid = to.params.rfid; // Extract RFID from the route parameter
-      const response = await fetch(`http://localhost:3000/user/${rfid}`);
+      const response = await fetch(`http://localhost:3000/user/check/${rfid}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
@@ -27,7 +27,7 @@ export default {
 
   beforeRouteUpdate(to, from) {
     this.user = null; // Clear current user data
-    fetch(`http://localhost:3000/user/${to.params.rfid}`)
+    fetch(`http://localhost:3000/user/check/${to.params.rfid}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -42,7 +42,7 @@ export default {
     // Tambahkan logika redirect setelah 5 detik
     setTimeout(() => {
       this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
-    }, 5000); // 5000 ms = 5 detik
+    }, 4000); // 5000 ms = 5 detik
   },
 
   methods: {
@@ -52,14 +52,38 @@ export default {
     setError(err) {
       this.error = err.message || "Ada error tidak diketahui";
     },
+    formatDate(date) {
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+      };
+      return new Date(date).toLocaleString("id-ID", options); // Adjust "id-ID" for locale
+    },
   },
+};
+
+const options = {
+  weekday: "long", // Full weekday name
+  year: "numeric", // Full numeric year
+  month: "long", // Full month name
+  day: "numeric", // Day of the month
+  hour: "2-digit", // Two-digit hour
+  minute: "2-digit", // Two-digit minute
+  second: "2-digit", // Two-digit second
+  hourCycle: "h23", // 24-hour time format
 };
 </script>
 
 <template>
   <div class="background">
     <div class="container">
-      <h1 class="title">RFID: {{ rfid }}</h1>
+      <!-- <h1 class="title">RFID: {{ rfid }}</h1> -->
 
       <div v-if="user && user.message" class="error-message">
         <p>{{ user.message }}</p>
@@ -67,11 +91,30 @@ export default {
 
       <div v-else-if="user && user.nama" class="user-info">
         <div class="info">
-          <p><strong></strong> {{ user.nama }}</p>
-          <p><strong></strong> {{ user.kelas }} {{ user.jurusan }}</p>
+          <h2>Informasi</h2>
+          <p>Nama : {{ user.nama }}</p>
+          <p>Kelas : {{ user.kelas }} {{ user.jurusan }}</p>
+          <h2>Terakhir Mengunjungi</h2>
+          <p>
+            <span
+              :style="{ color: user.lastEvent == 'check_in' ? 'green' : 'red' }"
+              >{{ user.lastEvent == "check_in" ? "Masuk" : "Keluar" }}</span
+            >
+            pada
+            {{
+              user.lastTimestamp ? formatDate(user.lastTimestamp) : "No Data"
+            }}
+          </p>
 
-          <p><strong></strong> 2024-21-0113/12/4</p>
-          <p><strong></strong> check_in tes</p>
+          <h2>Sekarang</h2>
+          <p>
+            <span
+              :style="{ color: user.event == 'check_in' ? 'green' : 'red' }"
+              >{{ user.event == "check_in" ? "Masuk" : "Keluar" }}</span
+            >
+            pada
+            {{ user.timestamp ? formatDate(user.timestamp) : "No Data" }}
+          </p>
         </div>
       </div>
 
@@ -86,6 +129,7 @@ export default {
 
     <div>
       <img
+        class="image"
         src="https://raw.githubusercontent.com/pplg-smk-metland/metschoo-library/7b47c81ada79b2a73cc7f448c795cfbc10a7e43f/assets/profilepicture.svg"
         alt=""
       />
@@ -137,7 +181,6 @@ body {
 
 .container {
   max-width: 100vw;
-  margin: 20px auto;
   padding: 20px;
 
   border: 1px solid #4641416d;
@@ -161,11 +204,9 @@ body {
   padding: 10px;
   border: 1px solid #f5c2c7;
   border-radius: 4px;
-  margin-bottom: 20px;
 }
 
 .user-info {
-  padding: 20px;
   border-radius: 8px;
 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -181,14 +222,14 @@ body {
 .user-info .info p {
   margin: 8px 0;
 
-  font-size: 25px;
-}
-
-.user-info .info strong {
+  font-size: 20px;
 }
 
 .loading {
   font-style: italic;
   text-align: center;
+}
+.image {
+  width: 75%;
 }
 </style>
