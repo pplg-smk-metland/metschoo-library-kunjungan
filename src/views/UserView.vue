@@ -42,7 +42,7 @@ export default {
     // Tambahkan logika redirect setelah 5 detik
     setTimeout(() => {
       this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
-    }, 4000); // 5000 ms = 5 detik
+    }, 5000); // 5000 ms = 5 detik
   },
 
   methods: {
