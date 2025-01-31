@@ -38,12 +38,12 @@ export default {
       .catch((err) => this.setError(err));
   },
 
-  // mounted() {
-  //   // Tambahkan logika redirect setelah 5 detik
-  //   setTimeout(() => {
-  //     this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
-  //   }, 4000); // 5000 ms = 5 detik
-  // },
+  mounted() {
+    // Tambahkan logika redirect setelah 5 detik
+    setTimeout(() => {
+      this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
+    }, 4000); // 5000 ms = 5 detik
+  },
 
   methods: {
     setUser(user) {
@@ -66,17 +66,6 @@ export default {
       return new Date(date).toLocaleString("id-ID", options); // Adjust "id-ID" for locale
     },
   },
-};
-
-const options = {
-  weekday: "long", // Full weekday name
-  year: "numeric", // Full numeric year
-  month: "long", // Full month name
-  day: "numeric", // Day of the month
-  hour: "2-digit", // Two-digit hour
-  minute: "2-digit", // Two-digit minute
-  second: "2-digit", // Two-digit second
-  hourCycle: "h23", // 24-hour time format
 };
 </script>
 
