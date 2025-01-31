@@ -38,12 +38,12 @@ export default {
       .catch((err) => this.setError(err));
   },
 
-  mounted() {
-    // Tambahkan logika redirect setelah 5 detik
-    setTimeout(() => {
-      this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
-    }, 4000); // 5000 ms = 5 detik
-  },
+  // mounted() {
+  //   // Tambahkan logika redirect setelah 5 detik
+  //   setTimeout(() => {
+  //     this.$router.push("/"); // Ganti '/' dengan path halaman tapping Anda
+  //   }, 4000); // 5000 ms = 5 detik
+  // },
 
   methods: {
     setUser(user) {
@@ -91,9 +91,6 @@ const options = {
 
       <div v-else-if="user && user.nama" class="user-info">
         <div class="info">
-          <h2>Informasi</h2>
-          <p>Nama : {{ user.nama }}</p>
-          <p>Kelas : {{ user.kelas }} {{ user.jurusan }}</p>
           <h2>Terakhir Mengunjungi</h2>
           <p>
             <span
@@ -127,12 +124,14 @@ const options = {
       </div>
     </div>
 
-    <div>
+    <div v-if="user && user.nama" class="foto">
       <img
         class="image"
         src="https://raw.githubusercontent.com/pplg-smk-metland/metschoo-library/7b47c81ada79b2a73cc7f448c795cfbc10a7e43f/assets/profilepicture.svg"
         alt=""
       />
+      <p>{{ user.nama }}</p>
+      <p>{{ user.kelas }} {{ user.jurusan }}</p>
     </div>
   </div>
 </template>
@@ -145,6 +144,22 @@ const options = {
 
 body {
   font-family: "Inter Variable", sans-serif;
+}
+
+.foto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.foto img {
+  padding-bottom: 5px;
+  margin: auto;
+}
+
+.foto p {
+  font-size: 22px;
 }
 
 .background {
