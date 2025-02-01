@@ -1,4 +1,4 @@
-cd /home/orangepi/Music/songs/Song_2/
+cd /home/orangepi/Music/songs/Song_2
 
 git pull
 npm install
