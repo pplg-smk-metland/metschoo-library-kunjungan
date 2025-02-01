@@ -3,7 +3,7 @@ cd /home/orangepi/Music/songs/Song_2/
 git pull
 npm install
 
-nohup node server.js > backend.log 2>&1 &
+nohup node server.mjs > backend.log 2>&1 &
 
 cd /home/orangepi/metschoo-library-kunjungan
 
