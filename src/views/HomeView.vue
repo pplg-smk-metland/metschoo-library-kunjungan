@@ -14,6 +14,6 @@ document.addEventListener("keydown", (event) => {
 
 <template>
   <main>
-    <h2>TAPPING KARTU DISINI</h2>
+    <h2>TAP KARTU ANDA DISINI</h2>
   </main>
 </template>
