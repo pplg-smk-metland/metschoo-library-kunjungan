@@ -14,6 +14,18 @@ document.addEventListener("keydown", (event) => {
 
 <template>
   <main>
-    <h2>TAP KARTU ANDA DISINI</h2>
+    <div class="container">
+      <h2>Selamat Datang di Metschoo Library</h2>
+      <img src="https://metschoo-lib-preview.netlify.app/logo.svg" alt="" />
+      <h2>Silahkan Tap Kartu Anda</h2>
+    </div>
   </main>
 </template>
+<style>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+</style>
