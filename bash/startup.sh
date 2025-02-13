@@ -1,14 +1,12 @@
 cd /home/orangepi/Music/songs/Song_2
 
 git pull
-npm install
 
 nohup node server.mjs > backend.log 2>&1 &
 
 cd /home/orangepi/metschoo-library-kunjungan
 
 git pull
-npm install
 npm run build
 
 nohup npm run preview > frontend.log 2>&1 &
